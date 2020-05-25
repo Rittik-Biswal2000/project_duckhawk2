@@ -260,7 +260,8 @@ class _WelcomePageState extends State<WelcomePage> {
   }
 
   getuser() async{
-    FirebaseUser user=await FirebaseAuth.instance.currentUser();
+    print("user");
+    /*FirebaseUser user=await FirebaseAuth.instance.currentUser();
     if(user.uid!=null)
     {
       Fluttertoast.showToast(
@@ -273,13 +274,14 @@ class _WelcomePageState extends State<WelcomePage> {
           fontSize: 8.0
       );
 
-    }
+    }*/
 
-    pr.show();
+
     loc=await _getCurrentLocation();
     loc="Cuttack";
+    print("fsdfyfcyuugvhbuh");
     await getData(loc);
-    pr.hide();
+
     Navigator.pop(context);
 
       Navigator.push(

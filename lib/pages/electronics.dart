@@ -12,6 +12,7 @@ import 'package:project_duckhawk/pages/cart2.dart';
 
 import 'package:project_duckhawk/pages/item_info.dart';
 import 'package:project_duckhawk/main.dart';
+import 'package:project_duckhawk/src/loginPage.dart';
 import 'package:project_duckhawk/src/welcomPage.dart';
 
 import 'cart1.dart';
@@ -40,12 +41,24 @@ class _eState extends State<e> {
           actions: <Widget>[
             // action button
             IconButton(icon:Icon(Icons.shopping_cart),
-              onPressed: () async {
-                pr.show();
-                await getcartData();
-                pr.hide();
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>new cart2()));
-              },
+                onPressed: () async {
+                  pr.show();
+                  FirebaseUser user=await FirebaseAuth.instance.currentUser();
+                  pr.hide();
+                  if(user==null){
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => new lp()));
+                  }
+                  else{
+                    pr.show();
+                    await getcartData();
+                    pr.hide();
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => new cart2()));
+                  }
+
+                },
+
             ),
           ]
         //leading:new Text("hi"),
@@ -79,13 +92,28 @@ class _eState extends State<e> {
             ),
             Expanded(
               flex: 1,
-              child: IconButton (
+              child: IconButton(
                   icon: new Icon(Icons.account_box),
-                  onPressed: () async{
+                  onPressed: () async {
                     pr.show();
-                    await getuac();
+                    FirebaseUser user=await FirebaseAuth.instance.currentUser();
+                    print(user);
                     pr.hide();
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>new acc1()));
+                    if(user==null){
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => new lp()));
+
+                    }
+                    else{
+                      pr.show();
+                      await getuac();
+                      pr.hide();
+
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => new acc1()));
+                    }
+
+
                   }),
             ),
             Expanded(
@@ -94,11 +122,20 @@ class _eState extends State<e> {
                 icon: new Icon(Icons.shopping_cart),
                 onPressed: () async {
                   pr.show();
-                  await getcartData();
+                  FirebaseUser user=await FirebaseAuth.instance.currentUser();
                   pr.hide();
-                  print("Time taken");
-                  stime=s.elapsedMilliseconds;
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>new cart2()));
+                  if(user==null){
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => new lp()));
+                  }
+                  else{
+                    pr.show();
+                    await getcartData();
+                    pr.hide();
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => new cart2()));
+                  }
+
                 },),
             ),
             /*Expanded(

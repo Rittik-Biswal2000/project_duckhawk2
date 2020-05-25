@@ -213,7 +213,8 @@ class _acc1State extends State<acc1> {
                       children: <Widget>[
                         new RaisedButton(onPressed: ()async{
                           await FirebaseAuth.instance.signOut();
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>new MyApp()));
+                          //Navigator.push(context, MaterialPageRoute(builder: (context)=>new MyApp()));
+                          Navigator.pop(context);
                         }, child: new Text("Logout",style: TextStyle(fontSize: 32.0,fontWeight: FontWeight.bold,fontStyle: FontStyle.italic),),color: Colors.greenAccent,)
 
                       ],

@@ -20,6 +20,7 @@ class lp extends StatefulWidget {
   _lpState createState() => _lpState();
 }
 String _email,_password;
+FirebaseUser curruser;
 class _lpState extends State<lp> {
   Widget _backButton() {
     return InkWell(
@@ -97,8 +98,9 @@ class _lpState extends State<lp> {
                     elevation: 7.0,
                     onPressed: () async{
                       pr.show();
-                      await FirebaseAuth.instance.signInWithEmailAndPassword(email: _email, password: _password).then((user)  {
+                      await FirebaseAuth.instance.signInWithEmailAndPassword(email: _email, password: _password).then((user)  async {
                         pr.hide();
+
 
                          if(user.user.uid!=null) {
                            Fluttertoast.showToast(
@@ -109,10 +111,11 @@ class _lpState extends State<lp> {
                                textColor: Colors.white,
                                fontSize: 8.0
                            );
+                           curruser=await FirebaseAuth.instance.currentUser();
                            Navigator.pop(context);
-                           Navigator.push(
+                           /*Navigator.push(
                                context,
-                               MaterialPageRoute(builder: (context) => MyApp()));
+                               MaterialPageRoute(builder: (context) => MyApp()));*/
 
                          }
                        /* Navigator.push(
@@ -298,7 +301,7 @@ class _lpState extends State<lp> {
     return RichText(
       textAlign: TextAlign.center,
       text: TextSpan(
-          text: 'DuckHawk',
+          text: 'Duckhawk',
           style: GoogleFonts.portLligatSans(
             textStyle: Theme.of(context).textTheme.display1,
             fontSize: 30,

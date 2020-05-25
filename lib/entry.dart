@@ -49,7 +49,7 @@ class MyApp extends StatelessWidget {
       onWillPop: _onBackPressed,
       child: MaterialApp(
 
-        title: 'Flutter Demo',
+        title: 'Duckhawk',
         theme: ThemeData(
           primarySwatch: Colors.blue,
           textTheme:GoogleFonts.latoTextTheme(textTheme).copyWith(

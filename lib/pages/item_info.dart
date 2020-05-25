@@ -24,6 +24,7 @@ import 'package:project_duckhawk/pages/cart2.dart';
 import 'package:project_duckhawk/pages/location.dart';
 import 'package:project_duckhawk/pages/olocation.dart';
 import 'package:project_duckhawk/pages/orderconfirm.dart';
+import 'package:project_duckhawk/src/loginPage.dart';
 import 'package:project_duckhawk/src/welcomPage.dart';
 import 'package:cloud_functions/cloud_functions.dart';
   import 'package:http/http.dart' as http;
@@ -456,12 +457,23 @@ getpoint(String s)async{
               actions: <Widget>[
           // action button
           IconButton(icon:Icon(Icons.shopping_cart),
-        onPressed: () async{
-            pr.show();
-          await getcartData();
-          pr.hide();
-            Navigator.push(context, MaterialPageRoute(builder: (context)=>new cart2()));
-        },
+            onPressed: () async {
+              pr.show();
+              FirebaseUser user=await FirebaseAuth.instance.currentUser();
+              pr.hide();
+              if(user==null){
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => new lp()));
+              }
+              else{
+                pr.show();
+                await getcartData();
+                pr.hide();
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => new cart2()));
+              }
+
+            },
       ),
             ]
             //title: new Text(name.split(': ')[1]),
@@ -493,13 +505,28 @@ getpoint(String s)async{
               ),
               Expanded(
                 flex: 1,
-                child: IconButton (
+                child: IconButton(
                     icon: new Icon(Icons.account_box),
-                    onPressed: () async{
+                    onPressed: () async {
                       pr.show();
-                      await getuac();
+                      FirebaseUser user=await FirebaseAuth.instance.currentUser();
+                      print(user);
                       pr.hide();
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=>new acc1()));
+                      if(user==null){
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => new lp()));
+
+                      }
+                      else{
+                        pr.show();
+                        await getuac();
+                        pr.hide();
+
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => new acc1()));
+                      }
+
+
                     }),
               ),
               Expanded(
@@ -508,11 +535,20 @@ getpoint(String s)async{
                   icon: new Icon(Icons.shopping_cart),
                   onPressed: () async {
                     pr.show();
-                    await getcartData();
+                    FirebaseUser user=await FirebaseAuth.instance.currentUser();
                     pr.hide();
-                    print("Time taken");
-                    stime=s.elapsedMilliseconds;
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>new cart2()));
+                    if(user==null){
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => new lp()));
+                    }
+                    else{
+                      pr.show();
+                      await getcartData();
+                      pr.hide();
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => new cart2()));
+                    }
+
                   },),
               ),
               /*Expanded(
@@ -599,11 +635,16 @@ getpoint(String s)async{
               children: <Widget>[
                 Expanded(
                   child:MaterialButton(
-                    onPressed:(quantity!='0')? (){
+                    onPressed:(quantity!='0')? () async {
                       /*addtocart();
                       Navigator.push(context,MaterialPageRoute(builder:(context)=>new cart()));*/
-
-                      createAlertDialog(context, widget.n, widget.image, widget.p);
+                      FirebaseUser user=await FirebaseAuth.instance.currentUser();
+                      if(user==null){
+                        Navigator.push(context,MaterialPageRoute(builder:(context)=>new lp()));
+                      }else {
+                        createAlertDialog(
+                            context, widget.n, widget.image, widget.p);
+                      }
                       //Navigator.pop(context);
                     }:null,
                     color:Colors.redAccent,
@@ -613,17 +654,25 @@ getpoint(String s)async{
                   ),
                 ),
                 new IconButton(icon:Icon(Icons.add_shopping_cart),onPressed: ()async{
-                  pr.show();
-                  await addtocart();
-                  pr.hide();
-                  Fluttertoast.showToast(
-                      msg: "Added to cart",
-                      toastLength: Toast.LENGTH_SHORT,
-                      gravity: ToastGravity.BOTTOM,
-                      timeInSecForIosWeb: 1,
-                      textColor: Colors.white,
-                      fontSize: 8.0
-                  );
+                  FirebaseUser user=await FirebaseAuth.instance.currentUser();
+                  if(user==null)
+                    {
+                      Navigator.push(context,MaterialPageRoute(builder:(context)=>new lp()));
+                    }
+                  else{
+                    pr.show();
+                    await addtocart();
+                    pr.hide();
+                    Fluttertoast.showToast(
+                        msg: "Added to cart",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.BOTTOM,
+                        timeInSecForIosWeb: 1,
+                        textColor: Colors.white,
+                        fontSize: 8.0
+                    );
+                  }
+
 
                   //Navigator.push(context,MaterialPageRoute(builder:(context)=>new cart1()));
                 }),

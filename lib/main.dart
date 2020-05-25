@@ -15,6 +15,7 @@ import 'package:project_duckhawk/pages/cart2.dart';
 import 'package:project_duckhawk/pages/electronics.dart';
 import 'package:project_duckhawk/pages/item_info.dart';
 import 'package:project_duckhawk/pages/location.dart';
+import 'package:project_duckhawk/src/loginPage.dart';
 import 'package:project_duckhawk/src/welcomPage.dart';
 
 FirebaseUser user;
@@ -241,12 +242,20 @@ class _HomePageState extends State<HomePage> {
               icon: Icon(Icons.shopping_cart),
               onPressed: () async {
                 pr.show();
-                await getcartData();
+                FirebaseUser user=await FirebaseAuth.instance.currentUser();
                 pr.hide();
-                print("Time taken");
-                stime = s.elapsedMilliseconds;
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => new cart2()));
+                if(user==null){
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => new lp()));
+                }
+                else{
+                  pr.show();
+                  await getcartData();
+                  pr.hide();
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => new cart2()));
+                }
+
               },
             ),
           ]
@@ -306,10 +315,24 @@ class _HomePageState extends State<HomePage> {
                   icon: new Icon(Icons.account_box),
                   onPressed: () async {
                     pr.show();
-                    await getuac();
+                    FirebaseUser user=await FirebaseAuth.instance.currentUser();
+                    print(user);
                     pr.hide();
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => new acc1()));
+                    if(user==null){
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => new lp()));
+
+                    }
+                    else{
+                      pr.show();
+                      await getuac();
+                      pr.hide();
+
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => new acc1()));
+                    }
+
+
                   }),
             ),
             Expanded(
@@ -318,12 +341,20 @@ class _HomePageState extends State<HomePage> {
                 icon: new Icon(Icons.shopping_cart),
                 onPressed: () async {
                   pr.show();
-                  await getcartData();
+                  FirebaseUser user=await FirebaseAuth.instance.currentUser();
                   pr.hide();
-                  print("Time taken");
-                  stime = s.elapsedMilliseconds;
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => new cart2()));
+                  if(user==null){
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => new lp()));
+                  }
+                  else{
+                    pr.show();
+                    await getcartData();
+                    pr.hide();
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => new cart2()));
+                  }
+
                 },
               ),
             ),
@@ -754,26 +785,27 @@ getuac() async {
   uquantity.clear();
   uprice.clear();
   FirebaseUser user = await FirebaseAuth.instance.currentUser();
-  print("uac");
-  await Firestore.instance
-      .collection("users")
-      .where("uid", isEqualTo: user.uid)
-      .getDocuments()
-      .then((QuerySnapshot snapshot) {
-    //snapshot.documents.forEach((f) => print('${f.data}}'));
-    snapshot.documents.forEach((f) => udetails.add(f.data));
+    print("uac");
+    await Firestore.instance
+        .collection("users")
+        .where("uid", isEqualTo: user.uid)
+        .getDocuments()
+        .then((QuerySnapshot snapshot) {
+      //snapshot.documents.forEach((f) => print('${f.data}}'));
+      snapshot.documents.forEach((f) => udetails.add(f.data));
 
-    //print(s.length);
-    //print(s.split(',')[0]);
-    //print(s.split(',')[1]);
-    //print(s.split(',')[2]);
-    //print(s.split(',')[3]);
-    //
+      //print(s.length);
+      //print(s.split(',')[0]);
+      //print(s.split(',')[1]);
+      //print(s.split(',')[2]);
+      //print(s.split(',')[3]);
+      //
 
-    //print("s is " + s);
+      //print("s is " + s);
 
-    //g = s.toString();
-  });
+      //g = s.toString();
+    });
+
   /*
  await Firestore.instance.collection('users').document(user.uid).collection('orders').getDocuments().then((QuerySnapshot snapshot){
    snapshot.documents.forEach((f)=>oid.add(f.documentID));
