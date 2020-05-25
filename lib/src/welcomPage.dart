@@ -18,9 +18,9 @@ import 'package:latlong/latlong.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:project_duckhawk/main.dart';
 import 'package:project_duckhawk/pages/cart2.dart';
+import 'package:project_duckhawk/pages/categories.dart';
 import 'package:project_duckhawk/pages/item_info.dart';
 import 'package:project_duckhawk/pages/location.dart';
-import 'package:project_duckhawk/pages/olocation.dart';
 import 'package:project_duckhawk/src/loginPage.dart';
 import 'package:project_duckhawk/src/signup.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -43,22 +43,17 @@ ProgressDialog pr;
 var a,b,loc;
 List seller=[];
 List sellerlist=[];
-List fsellerlist=[];
 List fdistance=[];
 List fowner_name=[];
 List fowner_phone=[];
 List imgurl=[];
 List quantity=[];
-List shop_image=[];
-List fshop_image=[];
 List price=[];
 List name=[];
 List description=[];
 List l=[];
 List prod_id=[];
-List fprod_id=[];
 List prod_cat=[];
-List fprod_cat=[];
 List distance=[];
 var len;
 String badd="Loading";
@@ -260,8 +255,7 @@ class _WelcomePageState extends State<WelcomePage> {
   }
 
   getuser() async{
-    print("user");
-    /*FirebaseUser user=await FirebaseAuth.instance.currentUser();
+    FirebaseUser user=await FirebaseAuth.instance.currentUser();
     if(user.uid!=null)
     {
       Fluttertoast.showToast(
@@ -274,19 +268,17 @@ class _WelcomePageState extends State<WelcomePage> {
           fontSize: 8.0
       );
 
-    }*/
+    }
 
-
+    pr.show();
     loc=await _getCurrentLocation();
-    loc="Cuttack";
-    print("fsdfyfcyuugvhbuh");
     await getData(loc);
-
+    pr.hide();
     Navigator.pop(context);
 
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => HomePage(null)),
+        MaterialPageRoute(builder: (context) => categories()),
       );
 
     //Navigator.pop(context);
@@ -362,9 +354,6 @@ Future getData(String x) async {
   var lati, longi;
   //var x=await _getCurrentLocation();
   sellerlist.clear();
-  fsellerlist.clear();
-  shop_image.clear();
-  fshop_image.clear();
   owner_name.clear();
   owner_phone.clear();
   fdistance.clear();
@@ -372,7 +361,6 @@ Future getData(String x) async {
   fowner_phone.clear();
   distance.clear();
   prod_id.clear();
-  fprod_id.clear();
   List list;
   //loc
   String link = "https://duckhawk-1699a.firebaseio.com/Seller/" + loc + ".json";
@@ -403,7 +391,7 @@ Future getData(String x) async {
      for (var i = 0; i < length; i++) {
        sellerlist.add(list[i]);
      }
-     //print(sellerlist);
+     print(sellerlist);
 
      //  print(data[list[3]]);
 
@@ -418,11 +406,6 @@ Future getData(String x) async {
        double lati = data1["Latitude"];
        owner_phone.add(data1["Owner_Number"].toString());
        owner_name.add(data1["Shop_Name"]);
-       if(data1["Shop_Image"]==null){
-         shop_image.add("https://duckhawk.in/icon.jpeg");
-       }else {
-         shop_image.add(data1["Shop_Image"]);
-       }
 
        double longi = data1["Longitude"];
 
@@ -523,13 +506,7 @@ Future getData(String x) async {
     int x=fdistance.indexOf(distance[i]);
     fowner_name.add(owner_name[x]);
     fowner_phone.add(owner_phone[x]);
-    fsellerlist.add(sellerlist[x]);
-    fprod_id.add(prod_id[x]);
-    fshop_image.add(shop_image[x]);
-   // fprod_cat.add(prod_cat[x]);
-
   }
-  print(fsellerlist);
 
 
 
